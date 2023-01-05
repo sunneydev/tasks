@@ -21,10 +21,8 @@ class Task implements ITask {
     this._fn = fn;
   }
 
-  async run(fn: () => PromiseLike<void>) {
+  async run() {
     if (this._cancelled) return;
-
-    this._fn = fn;
 
     const delay =
       this._delay ||
@@ -40,7 +38,7 @@ class Task implements ITask {
 
     if (this._repeat) {
       await utils.sleep(this._repeat);
-      await this.run(this._fn);
+      await this.run();
     }
   }
 
