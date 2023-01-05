@@ -1,0 +1,32 @@
+{
+  "name": "tasks",
+  "version": "0.0.1",
+  "description": "A simple task manager for Node.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs"
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --minify --format cjs,esm --dts-resolve",
+    "test": "vitest run",
+    "prepublishOnly": "pnpm run build"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "tsup": "6.5.0",
+    "typescript": "4.9.3"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.7"
+  }
+}
