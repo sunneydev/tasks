@@ -1,5 +1,5 @@
 {
-  "name": "tasks",
+  "name": "@sunney/tasks",
   "version": "0.0.1",
   "description": "A simple task manager for Node.js",
   "publishConfig": {
