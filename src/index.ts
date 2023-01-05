@@ -3,7 +3,7 @@ import type { TimeUnit } from "./types";
 import * as utils from "./utils";
 
 interface ITask {
-  run: (fn: () => PromiseLike<void>) => PromiseLike<void>;
+  run: () => PromiseLike<void>;
   schedule: (date: Date | Dayjs) => ITask;
   delay: (time: number, unit: TimeUnit) => ITask;
   repeat: (time: number, unit: TimeUnit) => ITask;
