@@ -1,9 +1,10 @@
 import type { Dayjs } from "dayjs";
-import type { TimeUnit } from "./types";
+import type { Constructor, TimeUnit } from "./types";
 import * as utils from "./utils";
 
 interface ITask {
   run: () => PromiseLike<void>;
+  logging: (log: boolean) => ITask;
   schedule: (date: Date | Dayjs) => ITask;
   delay: (time: number, unit: TimeUnit) => ITask;
   repeat: (time: number, unit: TimeUnit) => ITask;
@@ -11,22 +12,41 @@ interface ITask {
 }
 
 class Task implements ITask {
+  public name: string;
   private _fn: () => PromiseLike<void>;
+  private _log: boolean = false;
   private _date: Date | null = null;
   private _repeat: number | null = null;
   private _delay: number | null = null;
   private _cancelled: boolean = false;
 
-  constructor(fn: () => PromiseLike<void>) {
+  constructor(name: string, fn: () => PromiseLike<void>) {
+    this.name = name;
     this._fn = fn;
   }
 
   async run() {
     if (this._cancelled) return;
 
-    const delay =
-      this._delay ||
-      (this._date ? this._date.getTime() - new Date().getTime() : 0);
+    if (this._date && this._repeat) {
+      throw new Error("Cannot schedule and repeat a task");
+    }
+
+    const delay = this._delay || (this._date ? this._date.getTime() - new Date().getTime() : 0);
+
+    if (this._log) {
+      let logMessage = `Running task ${this.name}`;
+
+      if (delay > 0) {
+        logMessage += ` in ${delay}ms`;
+      }
+
+      if (this._repeat) {
+        logMessage += ` and repeating every ${this._repeat}ms`;
+      }
+
+      console.log(logMessage);
+    }
 
     if (delay > 0) {
       await utils.sleep(delay);
@@ -49,6 +69,11 @@ class Task implements ITask {
     return this;
   }
 
+  logging(log: boolean): ITask {
+    this._log = log;
+    return this;
+  }
+
   schedule(date: Date | Dayjs): ITask {
     if (date < new Date()) throw new Error("Date cannot be in the past");
 
@@ -68,4 +93,4 @@ class Task implements ITask {
   }
 }
 
-export const task = (fn: () => PromiseLike<void>) => new Task(fn);
+export const task = (opts: Constructor<typeof Task>) => new Task(...opts);
