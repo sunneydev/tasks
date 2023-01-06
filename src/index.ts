@@ -11,6 +11,8 @@ interface ITask {
   cancel: () => void;
 }
 
+export const task = (name: string, fn: () => PromiseLike<void>): ITask => new Task(name, fn);
+
 class Task implements ITask {
   public name: string;
   private _fn: () => PromiseLike<void>;
@@ -92,5 +94,3 @@ class Task implements ITask {
     this._cancelled = true;
   }
 }
-
-export const task = (name: string, fn: () => PromiseLike<void>): ITask => new Task(name, fn);
