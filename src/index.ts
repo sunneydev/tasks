@@ -1,5 +1,5 @@
 import type { Dayjs } from "dayjs";
-import type { Constructor, TimeUnit } from "./types";
+import type { TimeUnit } from "./types";
 import * as utils from "./utils";
 
 interface ITask {
@@ -93,4 +93,4 @@ class Task implements ITask {
   }
 }
 
-export const task = (opts: Constructor<typeof Task>) => new Task(...opts);
+export const task = (name: string, fn: () => PromiseLike<void>): ITask => new Task(name, fn);
