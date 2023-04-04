@@ -1,6 +1,6 @@
 {
   "name": "@sunney/tasks",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A simple task manager for Node.js",
   "publishConfig": {
     "access": "public"

@@ -1,9 +1,9 @@
 import type { Dayjs } from "dayjs";
-import type { TimeUnit } from "./types";
+import type { Fn, TimeUnit } from "./types";
 import * as utils from "./utils";
 
 interface ITask {
-  run: () => PromiseLike<void>;
+  run: Fn;
   logging: (log: boolean) => ITask;
   schedule: (date: Date | Dayjs) => ITask;
   delay: (time: number, unit: TimeUnit) => ITask;
@@ -11,18 +11,18 @@ interface ITask {
   cancel: () => void;
 }
 
-export const task = (name: string, fn: () => PromiseLike<void>): ITask => new Task(name, fn);
+export const task = (name: string, fn: Fn): ITask => new Task(name, fn);
 
 class Task implements ITask {
   public name: string;
-  private _fn: () => PromiseLike<void>;
+  private _fn: Fn;
   private _log: boolean = false;
   private _date: Date | null = null;
   private _repeat: number | null = null;
   private _delay: number | null = null;
   private _cancelled: boolean = false;
 
-  constructor(name: string, fn: () => PromiseLike<void>) {
+  constructor(name: string, fn: Fn) {
     this.name = name;
     this._fn = fn;
   }
@@ -34,7 +34,9 @@ class Task implements ITask {
       throw new Error("Cannot schedule and repeat a task");
     }
 
-    const delay = this._delay || (this._date ? this._date.getTime() - new Date().getTime() : 0);
+    const delay =
+      this._delay ||
+      (this._date ? this._date.getTime() - new Date().getTime() : 0);
 
     if (this._log) {
       let logMessage = `Running task ${this.name}`;
