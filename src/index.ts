@@ -59,7 +59,13 @@ class Task implements ITask {
       this._date = null;
     }
 
-    await this._fn();
+    try {
+      await this._fn();
+    } catch (e: any) {
+      console.error(
+        `Error running task ${this.name}: ${e.message || "Unknown error"}`
+      );
+    }
 
     if (this._repeat) {
       await utils.sleep(this._repeat);
