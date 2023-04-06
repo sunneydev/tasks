@@ -46,7 +46,8 @@ class Task implements ITask {
       }
 
       if (this._repeat) {
-        logMessage += ` and repeating every ${this._repeat}ms`;
+        const formattedDuration = utils.formatDuration(this._repeat);
+        logMessage += ` and repeating every ${formattedDuration}`;
       }
 
       console.log(logMessage);
