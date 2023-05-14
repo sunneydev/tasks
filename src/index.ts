@@ -1,6 +1,6 @@
 import type { Dayjs } from "dayjs";
-import type { Fn, TimeUnit } from "./types";
-import * as utils from "./utils";
+import type { Fn, TimeUnit } from "./types.js";
+import * as utils from "./utils.js";
 
 interface ITask {
   run: Fn;

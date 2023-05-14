@@ -1,6 +1,6 @@
-import type { TimeUnit } from "./types";
+import type { TimeUnit } from "./types.js";
 import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
+import duration from "dayjs/plugin/duration.js";
 
 dayjs.extend(duration);
 
